@@ -1,4 +1,5 @@
 // /src/components/MessageSubscription.tsx
+import { messageType } from '@/lib/utils';
 import { gql, useSubscription } from '@apollo/client';
 
 // --- Subscriptions ---
@@ -28,7 +29,10 @@ export const TYPING_USERS_SUBSCRIPTION = gql`
 `;
 
 // --- Typing User Subscription Component ---
-export function TypingUserSubscription({ groupId, onTypingUser }) {
+export function TypingUserSubscription({ groupId, onTypingUser }: {
+  groupId: string,
+  onTypingUser: (typingUsers: string[]) => void
+}) {
   useSubscription(TYPING_USERS_SUBSCRIPTION, {
     variables: { groupId },
     onData: ({ data }) => {
@@ -46,7 +50,10 @@ export function TypingUserSubscription({ groupId, onTypingUser }) {
 }
 
 // --- Message Subscription Component ---
-export default function MessageSubscription({ groupId, onNewMessage }) {
+export default function MessageSubscription({ groupId, onNewMessage }:{
+  groupId: string,
+  onNewMessage: (newMessage: messageType) => void
+}) {
   useSubscription(MESSAGE_SUBSCRIPTION, {
     variables: { groupId },
     onData: ({ data }) => {
