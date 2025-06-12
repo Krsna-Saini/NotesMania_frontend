@@ -1,7 +1,7 @@
 import { TooltipProvider, TooltipTrigger, Tooltip, TooltipContent } from "@radix-ui/react-tooltip";
 import { ArrowUp, Mic2Icon, MicIcon, Paperclip } from "lucide-react";
 import Image from "next/image";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, Dispatch, SetStateAction } from "react";
 import useVoiceInput from "../useVoiceInput";
 import useAudioRecorder from "../VoiceInput/Index";
 import FilePreview from "../Preview/Index";
@@ -9,12 +9,15 @@ import Button from "@/components/Multipurpose/Button/Index";
 import debounce from 'lodash.debounce';
 import { useSendMessageMutation } from "@/state/Api/group/api";
 import { useUpdateStopTypingMutation, useUpdateTypingMutation } from "@/state/Api/user/api";
-const ChatInput = ({ senderId, groupId }: {
+
+const Backend_url=process.env.NEXT_PUBLIC_BACKEND_URL
+const ChatInput = ({ senderId, groupId,setSendingMessage ,sendingMessage}: {
     senderId: string,
     groupId: string,
+    setSendingMessage:Dispatch<SetStateAction<boolean>>
+    sendingMessage:boolean
 }) => {
     // State to manage the visibility of the preview
-    const [sending, setsending] = useState(false)
     const [showpreview, setShowPreview] = useState(false)
     const { isRecording, audioFile, startRecording, stopRecording } = useAudioRecorder();
     const { transcript, isListening, startListening, stopListening } = useVoiceInput();
@@ -87,7 +90,7 @@ const ChatInput = ({ senderId, groupId }: {
 
     // Handle send
     const handleSend = async () => {
-        setsending(true)
+        setSendingMessage(true)
         let attachments = []
         if (files.length > 0 || audioFile) {
             const formdata = new FormData()
@@ -100,7 +103,7 @@ const ChatInput = ({ senderId, groupId }: {
             formdata.append('userId', senderId);
             formdata.append('groupId', groupId);
 
-            const response = await fetch('http://localhost:4000/upload', {
+            const response = await fetch(`${Backend_url}/upload`, {
                 method: 'POST',
                 body: formdata,
                 headers: {
@@ -125,7 +128,6 @@ const ChatInput = ({ senderId, groupId }: {
         }
         setText('')
         setFiles([])
-        setsending(false)
     };
 
     return (
@@ -220,11 +222,11 @@ const ChatInput = ({ senderId, groupId }: {
                             <button
                                 className=" cursor-pointer "
                                 onClick={handleSend}
-                                disabled={sending}
+                                disabled={sendingMessage}
                             >
                                 <div className="md:h-10 h-8 w-12 md:w-16 rounded-full flex overflow-hidden items-center justify-center">
                                     {
-                                        sending ? (
+                                        sendingMessage ? (
                                             <Image className="object-contain scale-[3] md:scale-[4]" src="/loading2.gif" alt="sending" width={32} height={32} />
                                         ) : (
                                             <ArrowUp className="text-black size-6  md:size-8 translate-x-2 md:translate-x-3 p-1 bg-white rounded-full scale-125" />

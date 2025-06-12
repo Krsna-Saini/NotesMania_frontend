@@ -13,6 +13,8 @@ import { useRef, useState } from "react"
 import { useSelector } from "react-redux"
 import { themeStatetype } from "@/state/Global"
 
+const Backend_url=process.env.NEXT_PUBLIC_BACKEND_URL
+
 export default function AddAttachmentDropdown({refetch}:{
     refetch:()=> void
 }) {
@@ -41,7 +43,7 @@ export default function AddAttachmentDropdown({refetch}:{
             formdata.append("files", file)
             formdata.append('userId', userData.id);
             formdata.append("tags", JSON.stringify(tags))
-            const response = await fetch('http://localhost:4000/upload', {
+            const response = await fetch(`${Backend_url}/upload`, {
                 method: 'POST',
                 body: formdata,
                 headers: {

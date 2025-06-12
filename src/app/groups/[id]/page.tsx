@@ -25,6 +25,7 @@ const GroupDetail = () => {
   const [isFileOpen, setIsFileOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [typingUsers, setTypingUsers] = useState<string[]>([]);
+  const [sendingMessage,setSendingMessage]=useState(false);
   const isMobile = !useIsMobile()
   const openChat = () => {
     if (isMobile && isFileOpen && !isChatOpen) {
@@ -76,10 +77,10 @@ const GroupDetail = () => {
           {/* top bar */}
           <ChatNavbar refetch={refetch} typingUsers={typingUsers} openChat={openChat} openFile={openFile} isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} isChatOpen={isChatOpen} isFileOpen={isFileOpen} GroupInfo={GroupInfo} />
           {/* Group Content */}
-          <ChatBox refetch={refetch} groupId={String(id)} />
+          <ChatBox setSendingMessage={setSendingMessage} refetch={refetch} groupId={String(id)} />
           {/* input box */}
           <div className=" w-full flex items-center justify-center mb-2">
-            <ChatInput groupId={GroupInfo?.id} senderId={userData.id} />
+            <ChatInput sendingMessage={sendingMessage} setSendingMessage={setSendingMessage} groupId={GroupInfo?.id} senderId={userData.id} />
           </div>
         </div>
       </div>

@@ -37,7 +37,7 @@ export const graphqlAi_AssitanceApi = createApi({
   reducerPath: 'graphqlAi_AssitanceApi',
   tagTypes: ['Group', 'Attachments'], // Add this line
   baseQuery: fetchBaseQuery({
-    baseUrl: `${Backend_url}`,
+    baseUrl: `${Backend_url}/graphql`,
     prepareHeaders: (headers) => {
       headers.set('Content-Type', 'application/json');
       return headers;

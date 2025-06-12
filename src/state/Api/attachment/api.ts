@@ -30,7 +30,7 @@ const Backend_url=process.env.NEXT_PUBLIC_BACKEND_URL
 export const graphqlattachment = createApi({
   reducerPath: 'graphqlattachment',
   baseQuery: fetchBaseQuery({
-     baseUrl: `${Backend_url}`,
+     baseUrl: `${Backend_url}/graphql`,
     prepareHeaders: (headers) => {
       headers.set('Content-Type', 'application/json');
       return headers;

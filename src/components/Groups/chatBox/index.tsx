@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import MessageComp from "@/components/Groups/Message/Index";
 import MessageSubscription from "@/state/wsApi";
 import { messageType } from "@/lib/utils";
@@ -18,9 +18,11 @@ type MessageType = {
 const ChatBox = ({
   groupId,
   refetch,
+  setSendingMessage
 }: {
   groupId: string;
   refetch: () => void;
+  setSendingMessage: Dispatch<SetStateAction<boolean>>;
 }) => {
   const {
     data: chatData,
@@ -46,12 +48,13 @@ const ChatBox = ({
   }, [chatData?.data?.getGroup?.messages, groupId]);
 
   const handleNewMessage = (newMessage: messageType) => {
-    refetch();
+    
     setMessages((prev) => [...prev, { message: newMessage }]);
-
     if (!isVisible) {
       setNewMessage((prev) => prev + 1);
     }
+    setSendingMessage(false)
+    refetch();
   };
 
   useLayoutEffect(() => {
