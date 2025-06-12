@@ -103,8 +103,10 @@ const ChatNavbar = ({ typingUsers, GroupInfo, isMenuOpen, isFileOpen, isChatOpen
             <div className="leading-4 dark:text-white">
               <h1 className='text-sm md:text-lg'>{GroupInfo?.name}</h1>
               <div className="flex text-pink-400 text-[0.7rem]">
-                <span>{GroupInfo.members.length} members . </span>
-                <span>{typingUsers?.length} online</span>
+                <span>{GroupInfo.members.length} members</span>
+                {
+                  typingUsers?.length>0 && <span> . {typingUsers?.length} typing</span>
+                }
               </div>
             </div>
           </div>

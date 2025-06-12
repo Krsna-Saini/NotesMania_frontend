@@ -124,31 +124,52 @@ export default function AttachmentTable({ all, refetch }: { all: Attachment[], r
           <Popover>
             <PopoverTrigger asChild>
               <Button variant="ghost" className="px-2 py-1 text-sm hover:bg-accent">
-                <div className="flex items-center -space-x-2">
-                  {
-                    group.sampleMembers.map((item, index) => {
-                      return (
-                        <div key={index}>
-                          <Avatar>
-                            <AvatarImage className="size-8 border border-accent-foreground rounded-full" src={"/meeting4.jpg"}></AvatarImage>
-                          </Avatar>
+
+                {
+                  group.sampleMembers.length > 0 ?
+                    (
+                      <div className="flex items-center">
+                        <div className="flex items-center  -space-x-3">
+                          {group.sampleMembers.map((item, index) => {
+                            return (
+                              <div key={index}>
+                                <Avatar>
+                                  <AvatarImage className="size-8 border border-accent-foreground rounded-full" src={"/meeting4.jpg"}></AvatarImage>
+                                </Avatar>
+                              </div>
+                            )
+                          })}
+                          <Badge className="rounded-full p-0.5 size-8 bg-white dark:bg-black font-semibold text-blue-400 border border-teal-400">
+                            {group.totalMembers>3?group.totalMembers<23?`+${group.totalMembers-3}`:"20+":""}
+                          </Badge>
                         </div>
-                      )
-                    })
-                  }
-                  
-                </div>
+                      </div>
+                    )
+                    : (
+                      <Badge className="bg-rose-200 text-rose-600 p-2 rounded-full text-sm">
+                        Personal
+                      </Badge>
+                    )
+                }
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-84 shadow-md border bg-popover text-popover-foreground">
               <p className="font-semibold mb-2 text-sm">{group.name}</p>
               <div className="space-y-1">
-                {group.sampleMembers.map((m) => (
+                {group.sampleMembers.length>0?group.sampleMembers.map((m) => (
                   <div key={m._id} className="flex bg-accent rounded-2xl p-2 items-center gap-2 text-sm">
-                      <img src={m.profileImageUrl || "/meeting4.jpg"} alt={m.username} className="size-8 rounded-full" />
+                    <img src={m.profileImageUrl || "/meeting4.jpg"} alt={m.username} className="size-8 rounded-full" />
                     <span>{m.username}</span>
                   </div>
-                ))}
+                )):
+                (
+                  <div>
+                    <span className="italic text-muted-foreground">
+                      This is your Personal Attachment
+                    </span>
+                  </div>
+                )
+              }
               </div>
             </PopoverContent>
           </Popover>
@@ -252,7 +273,7 @@ export default function AttachmentTable({ all, refetch }: { all: Attachment[], r
           All
         </Badge>
         {uniqueTags?.map((tag) => {
-          if (tag?.length)return (
+          if (tag?.length) return (
             <Badge
               key={tag}
               className={`cursor-pointer ${tagFilter === tag ? "bg-accent text-accent-foreground" : "bg-accent-foreground text-accent"}`}
