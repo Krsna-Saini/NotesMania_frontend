@@ -7,9 +7,11 @@ import { ArrowRight, Brain, PartyPopper } from 'lucide-react'
 import Image from 'next/image'
 import React , {useEffect} from 'react'
 import { homeCardData } from '@/lib/utils'
+const ws_url=process.env.NEXT_PUBLIC_WS_URL
 const Home = () => {
 useEffect(() => {
-    const ws = new WebSocket('ws://localhost:4000/graphql');
+    console.log(ws_url)
+    const ws = new WebSocket( `${ws_url}`);
     ws.onopen = () => console.log("✅ WebSocket Connected");
     ws.onerror = (err) => console.error("❌ WebSocket Error", err);
   }, []);

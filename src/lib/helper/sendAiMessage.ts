@@ -16,7 +16,7 @@ interface MessageInput {
   selectedText?: string | null;
   error?: boolean;
 }
-
+const Backend_url=process.env.BACKEND_URL
 export const sendMessage = async ({
   inputText,
   selectedTextForQuery,
@@ -71,7 +71,7 @@ export const sendMessage = async ({
     await appendMessage({ chatId, message: userMessage });
 
     // fetcging the ai response
-    const res = await fetch("https://chatgpt-lye6.onrender.com/api/chat", {
+    const res = await fetch(`${Backend_url}/api/chat`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(requestBody),

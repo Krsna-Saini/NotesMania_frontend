@@ -1,3 +1,4 @@
+const Backend_url=process.env.BACKEND_URL
 export const generateChatTitle = async ({
   inputText,
 }: {
@@ -31,7 +32,7 @@ export const generateChatTitle = async ({
 
   try {
 
-    const res = await fetch("https://chatgpt-lye6.onrender.com/api/chat", {
+    const res = await fetch(`${Backend_url}/api/chat`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(requestBody),

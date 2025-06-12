@@ -3,14 +3,15 @@ import { ApolloClient, InMemoryCache, split, HttpLink } from '@apollo/client';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
 import { getMainDefinition } from '@apollo/client/utilities';
-
+const Backend_url=process.env.NEXT_PUBLIC_BACKEND_URL
+const ws_url=process.env.NEXT_PUBLIC_WS_URL
 const httpLink = new HttpLink({
-  uri: 'http://localhost:4000/graphql',
+  uri: `${Backend_url}/graphql`,
 });
 
 const wsLink = new GraphQLWsLink(
   createClient({
-    url: 'ws://localhost:4000/graphql',
+    url: `${ws_url}`,
   })
 );
 

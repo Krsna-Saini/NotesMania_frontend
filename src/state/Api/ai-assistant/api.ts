@@ -32,11 +32,12 @@ interface AiResponseForDeleteChat {
     deleteChat: AiResponse
   }
 }
+const Backend_url=process.env.NEXT_PUBLIC_BACKEND_URL
 export const graphqlAi_AssitanceApi = createApi({
   reducerPath: 'graphqlAi_AssitanceApi',
   tagTypes: ['Group', 'Attachments'], // Add this line
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:4000/graphql',
+    baseUrl: `${Backend_url}`,
     prepareHeaders: (headers) => {
       headers.set('Content-Type', 'application/json');
       return headers;
