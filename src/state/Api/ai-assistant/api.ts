@@ -16,21 +16,41 @@ interface AiResponseHistory {
   data: {
     getAiChatById: AiResponse
   }
+  errors?:[
+    {
+      message:string
+    }
+  ]
 }
 interface AiResponseHistoryForId {
   data: {
     getAiHistoryByUser: AiResponse[]
   }
+  errors?:[
+    {
+      message:string
+    }
+  ]
 }
 interface AiResponseForCreateNewChat {
   data: {
     addAiResponse: AiResponse
   }
+  errors?:[
+    {
+      message:string
+    }
+  ]
 }
 interface AiResponseForDeleteChat {
   data: {
     deleteChat: AiResponse
   }
+  errors?:[
+    {
+      message:string
+    }
+  ]
 }
 const Backend_url=process.env.NEXT_PUBLIC_BACKEND_URL
 export const graphqlAi_AssitanceApi = createApi({

@@ -33,6 +33,7 @@ import { useAcceptInviteRequestMutation, useAddMemberMutation, useDemoteAdminMut
 import { useSearchUserMutation } from '@/state/Api/user/api';
 import { useSelector } from 'react-redux';
 import { themeStatetype } from '@/state/Global';
+import { toast } from 'sonner';
 interface LinkMeta {
   title: string;
   description?: string;
@@ -105,7 +106,7 @@ const ChatNavbar = ({ typingUsers, GroupInfo, isMenuOpen, isFileOpen, isChatOpen
               <div className="flex text-pink-400 text-[0.7rem]">
                 <span>{GroupInfo.members.length} members</span>
                 {
-                  typingUsers?.length>0 && <span> . {typingUsers?.length} typing</span>
+                  typingUsers?.length > 0 && <span> . {typingUsers?.length} typing</span>
                 }
               </div>
             </div>
@@ -249,20 +250,44 @@ const MembersComponent = ({
     if (userStatus === "member") {
       return console.log("Only Leader and Admin can promote.");
     }
+    const promotingtoast = toast.loading("Promoting to admin...");
     promoteAdmin({ groupId, userId })
       .unwrap()
-      .then(console.log)
-      .catch(console.error);
+      .then((data) => {
+        console.log(data)
+        if (data.errors) {
+          toast.error(data?.errors[0].message || "there is some error")
+        }
+        else {
+          toast.success("Promoted to  sucessfully")
+        }
+      })
+      .catch(console.error)
+      .finally(()=>{
+         toast.dismiss(promotingtoast)
+      })
   };
 
   const handleDemoteAdmin = ({ userId }: { userId: string }) => {
     if (userStatus !== "leader") {
       return console.log("Only Leader can demote Admin.");
     }
+    const demotingAdmin = toast.loading("Demoting.... ")
     demoteAdmin({ groupId, userId })
       .unwrap()
-      .then(console.log)
-      .catch(console.error);
+      .then((data) => {
+        console.log(data)
+        if (data.errors) {
+          toast.error(data?.errors[0].message || "there is some error")
+        }
+        else {
+          toast.success("Admin Demoted sucessfully")
+        }
+      })
+      .catch(console.error)
+      .finally(()=>{
+         toast.dismiss(demotingAdmin)
+      });
   };
 
   const handleRemoveMember = ({
@@ -277,7 +302,14 @@ const MembersComponent = ({
     }
     removeMember({ groupId, userId })
       .unwrap()
-      .then(console.log)
+      .then((data) => {
+        if (data.errors) {
+          toast.error(data?.errors[0].message || "there is some error")
+        }
+        else {
+          toast.success("Member removed sucessfully")
+        }
+      })
       .catch(console.error);
   };
 
@@ -327,20 +359,20 @@ const MembersComponent = ({
                   {canShowContextMenu && (
                     <ContextMenuContent>
                       {showDemote && (
-                        <ContextMenuItem asChild>
+                        <ContextMenuItem>
                           <button onClick={() => handleDemoteAdmin({ userId: member.member.id })}>
                             Demote Admin
                           </button>
                         </ContextMenuItem>
                       )}
                       {showPromote && (
-                        <ContextMenuItem asChild>
+                        <ContextMenuItem >
                           <button onClick={() => handlePromoteAdmin({ userId: member.member.id })}>
                             Promote Admin
                           </button>
                         </ContextMenuItem>
                       )}
-                      <ContextMenuItem asChild>
+                      <ContextMenuItem >
                         <button
                           onClick={() =>
                             handleRemoveMember({
@@ -610,10 +642,16 @@ const InviteComponent = ({ groupId }: { groupId: string }) => {
     addMember({ groupId, userId })
       .unwrap()
       .then((data) => {
-        console.log(data);
+        if (data.errors) {
+          toast.error(data?.errors[0].message || "there is some error")
+        }
+        else {
+          toast.success("User added sucessfully")
+        }
       })
       .catch((err) => {
         console.log(err);
+
       })
       .finally(() => setAddLoadingId(null));
   };
@@ -712,10 +750,18 @@ const RequestComponent = ({
     setLoadingId(userId + "-accept");
     acceptRequest({ groupId, userId })
       .unwrap()
-      .then(() => {
+      .then((data) => {
         refetch();
+        if (data.errors) {
+          toast.error(data?.errors[0].message || "there is some error")
+        }
+        else {
+          toast.success("User added sucessfully")
+        }
       })
-      .catch(console.log)
+      .catch((err) => {
+        console.log(err)
+      })
       .finally(() => setLoadingId(null));
   };
 
@@ -723,10 +769,18 @@ const RequestComponent = ({
     setLoadingId(userId + "-reject");
     rejectRequest({ groupId, userId })
       .unwrap()
-      .then(() => {
+      .then((data) => {
         refetch();
+        if (data.errors) {
+          toast.error(data?.errors[0].message || "there is some error")
+        }
+        else {
+          toast.success("Request Rejected sucessfully")
+        }
       })
-      .catch(console.log)
+      .catch((err) => {
+        console.log(err)
+      })
       .finally(() => setLoadingId(null));
   };
 

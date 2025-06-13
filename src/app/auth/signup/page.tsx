@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { User, Mail, Lock } from 'lucide-react'
 import { useSignupMutation } from '@/state/Api/user/api'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
 const Signup = () => {
   const [username, setUsername] = useState<string>('')
@@ -16,9 +17,16 @@ const Signup = () => {
     e.preventDefault()
     setLoading(true)
     try {
-      await signup({ username, email, password }).unwrap()
-      console.log('Registration successful')
-      router.push('/auth/login')
+      await signup({ username, email, password }).unwrap().then((data) => {
+        if (data.data) {
+          toast.success('Registration successful')
+          router.push('/auth/login')
+        }
+        else{
+          toast.error("fill the form correctly")
+        }
+      })
+
     } catch (error) {
       console.error('Registration failed:', error)
     }

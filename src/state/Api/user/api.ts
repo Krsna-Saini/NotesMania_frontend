@@ -4,6 +4,11 @@ interface searchUser {
   data: {
     searchUser: UserType[]
   }
+  errors?:[
+    {
+      message:string
+    }
+  ]
 }
 const Backend_url=process.env.NEXT_PUBLIC_BACKEND_URL
 export const graphqlUserApi = createApi({

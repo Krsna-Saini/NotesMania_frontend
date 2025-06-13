@@ -44,6 +44,7 @@ import {
   useInviteRequestMutation,
   useSearchGroupsMutation,
 } from "@/state/Api/group/api";
+import { toast } from "sonner";
 
 type typeMember = {
   member: UserType;
@@ -77,9 +78,8 @@ const Sidebar = ({
     <div className="relative flex">
       {/* ============== MENU SIDEBAR ============== */}
       <div
-        className={`${
-          isMenuOpen ? "w-[60px] " : "lg:w-[60px] lg:scale-100 w-0 scale-0"
-        } absolute lg:relative transition-all duration-500 flex z-50 bg-white dark:bg-neutral-900 flex-col items-center justify-between h-full`}
+        className={`${isMenuOpen ? "w-[60px] " : "lg:w-[60px] lg:scale-100 w-0 scale-0"
+          } absolute lg:relative transition-all duration-500 flex z-50 bg-white dark:bg-neutral-900 flex-col items-center justify-between h-full`}
       >
         <LogoIcon />
 
@@ -102,9 +102,8 @@ const Sidebar = ({
 
       {/* ============== GROUP SIDEBAR ============== */}
       <div
-        className={`${isOpen ? "w-[300px]" : "px-0 w-0 lg:w-[67px]"} ${
-          isMenuOpen ? "left-[60px] w-[67px] border-l-2" : ""
-        } sm:border-l-2 rounded-xl border-gray-300 transition-all flex flex-col overflow-hidden lg:left-0 lg:relative absolute duration-500 h-[100vh] max-h-[100vh] pb-3 bg-white dark:bg-neutral-900 z-40`}
+        className={`${isOpen ? "w-[300px]" : "px-0 w-0 lg:w-[67px]"} ${isMenuOpen ? "left-[60px] w-[67px] border-l-2" : ""
+          } sm:border-l-2 rounded-xl border-gray-300 transition-all flex flex-col overflow-hidden lg:left-0 lg:relative absolute duration-500 h-[100vh] max-h-[100vh] pb-3 bg-white dark:bg-neutral-900 z-40`}
       >
         {/* ------- HEADER -------- */}
         <div className="flex bg-white dark:bg-neutral-900 z-50 mx-3 border-b-2 border-gray-300 py-3 justify-between items-center">
@@ -127,16 +126,14 @@ const Sidebar = ({
               width={500}
               height={500}
               src={"/meeting4.jpg"}
-              className={`${
-                isOpen ? "w-[150px] h-[150px]" : "w-[60px] h-[60px]"
-              } transition-all duration-500 object-cover rounded-full`}
+              className={`${isOpen ? "w-[150px] h-[150px]" : "w-[60px] h-[60px]"
+                } transition-all duration-500 object-cover rounded-full`}
               alt="Profile Image"
             />
           </div>
           <div
-            className={`${
-              isOpen ? "scale-100" : "scale-0 h-0 w-0"
-            } transition-all overflow-hidden duration-500 flex flex-col items-center mb-5`}
+            className={`${isOpen ? "scale-100" : "scale-0 h-0 w-0"
+              } transition-all overflow-hidden duration-500 flex flex-col items-center mb-5`}
           >
             <h2 className="text-xl font-semibold">{userData.username}</h2>
             <p className="text-gray-500 bg-[#fee4ff] rounded px-1 text-sm">
@@ -330,6 +327,14 @@ const CreateAndJoinGroupComponent = ({ userId }: { userId: string }) => {
     setSendLoadingId(groupId);
     inviteRequest({ groupId, userId })
       .unwrap()
+      .then((data) => {
+        if (data.errors) {
+          toast.error(data?.errors[0].message || "there is some error")
+        }
+        else {
+          toast.success("Request sent sucessfully")
+        }
+      })
       .catch(console.error)
       .finally(() => setSendLoadingId(null));
   };
@@ -341,7 +346,15 @@ const CreateAndJoinGroupComponent = ({ userId }: { userId: string }) => {
     setCreateLoading(true);
     createGroup({ name: groupname.trim(), leader: userId })
       .unwrap()
-      .then(() => setGroupname(""))
+      .then((data) => {
+        setGroupname("")
+        if (data.errors) {
+          toast.error(data?.errors[0].message || "there is some error")
+        }
+        else {
+          toast.success("Group created sucessfully")
+        }
+      })
       .catch(console.error)
       .finally(() => setCreateLoading(false));
   };

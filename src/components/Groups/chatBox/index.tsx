@@ -160,7 +160,7 @@ const ChatBox = ({
           </>
         )}
         
-      <div className="h-10 w-full" ref={bottomDivRef}></div>
+      <div className="h-20 w-full" ref={bottomDivRef}></div>
       </div>
       <div
         className={`${!newMessage && "hidden"

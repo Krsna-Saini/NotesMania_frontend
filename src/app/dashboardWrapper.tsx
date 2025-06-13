@@ -10,6 +10,7 @@ import { ApolloProvider } from "@apollo/client";
 import client from "@/state/wsClient";
 import { themeStatetype } from "@/state/Global";
 import AuthWrapper from "@/components/Multipurpose/authSecurity";
+import { Toaster } from "@/components/ui/sonner";
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const darkmode = useSelector((state: { global: themeStatetype }) => state.global.darkMode)
   const pathname: string = usePathname()
@@ -43,7 +44,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 const DashboardWrapper = ({ children }: { children: React.ReactNode }) => {
   const pathname: string = usePathname()
   return (
-    
+
     <ApolloProvider client={client}>
       <SidebarProvider>
         <Provider store={store}>
@@ -54,11 +55,12 @@ const DashboardWrapper = ({ children }: { children: React.ReactNode }) => {
             <AuthWrapper>
               {children}
             </AuthWrapper>
-            </DashboardLayout>
+          </DashboardLayout>
+          <Toaster/>
         </Provider>
       </SidebarProvider>
     </ApolloProvider>
-    
+
   );
 };
 

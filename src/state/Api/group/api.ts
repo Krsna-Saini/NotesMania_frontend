@@ -4,11 +4,21 @@ interface GetAttachments {
   data: {
     getAttachments: AttachmentType[]
   }
+  errors?:[
+    {
+      message:string
+    }
+  ]
 }
 interface searchGroups {
   data: {
     searchGroups: groupType[]
   }
+  errors?:[
+    {
+      message:string
+    }
+  ]
 }
 interface MessageType {
   message: messageType;
@@ -19,6 +29,11 @@ interface getChatById {
       messages: MessageType[]
     }
   }
+  errors?:[
+    {
+      message:string
+    }
+  ]
 }
 const Backend_url=process.env.NEXT_PUBLIC_BACKEND_URL
 export const graphqlGroupApi = createApi({
@@ -194,13 +209,6 @@ export const graphqlGroupApi = createApi({
             mutation PromoteAdmin($groupId: String!, $userId: String!) {
               promoteAdmin(groupId: $groupId, userId: $userId) {
                 id
-                admins {
-                  admin {
-                    id
-                    username
-                  }
-                  promotedAt
-                }
               }
             }
           `,
@@ -220,12 +228,6 @@ export const graphqlGroupApi = createApi({
             mutation DemoteAdmin($groupId: String!, $userId: String!) {
               demoteAdmin(groupId: $groupId, userId: $userId) {
                 id
-                admins {
-                  admin {
-                    id
-                    username
-                  }
-                }
               }
             }
           `,

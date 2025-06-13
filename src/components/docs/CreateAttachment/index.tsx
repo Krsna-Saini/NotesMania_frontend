@@ -12,6 +12,7 @@ import { Loader, Paperclip, Plus, X } from "lucide-react"
 import { useRef, useState } from "react"
 import { useSelector } from "react-redux"
 import { themeStatetype } from "@/state/Global"
+import { toast } from "sonner"
 
 const Backend_url=process.env.NEXT_PUBLIC_BACKEND_URL
 
@@ -52,8 +53,11 @@ export default function AddAttachmentDropdown({refetch}:{
             })
             if(response.ok){
                 refetch()
+                toast.success("File Added Sucessfully")
             }
-            console.log(response)
+            else {
+                toast.error("There is some error Saving file ")
+            }
         }
         setuploading(false)
         setFile(null)

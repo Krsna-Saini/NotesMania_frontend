@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux'
 import { UserType } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
 import { useLoginMutation } from '@/state/Api/user/api'
+import { toast } from 'sonner'
 
 type LoginResponse = {
   data: {
@@ -38,6 +39,10 @@ const Login = () => {
           dispatch(setUser({ ...user, createdAt: user.createdAt.toString() }))
           dispatch(setIsAuthenticated(true))
           router.push('/')
+          toast("login successfully")
+        }
+        else{
+          toast.error("Either email or password is not correct")
         }
       })
       .catch((error) => {
