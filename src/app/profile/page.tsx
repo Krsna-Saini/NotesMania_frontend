@@ -67,19 +67,19 @@ export default function ProfilePage() {
 
         {/* Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
-          <div className="bg-gradient-to-br from-purple-200 via-white to-blue-200 dark:from-gray-800 dark:to-gray-700 rounded-xl p-6 shadow-lg">
+          <div className="bg-gradient-to-br from-purple-200 via-white to-blue-200  rounded-xl p-6 shadow-lg">
             <Users className="mx-auto text-blue-500 w-6 h-6" />
-            <h3 className="text-lg font-semibold mt-2 text-gray-800 dark:text-white">Followers</h3>
+            <h3 className="text-lg font-semibold mt-2 text-gray-800 ">Followers</h3>
             <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">120</p>
           </div>
-          <div className="bg-gradient-to-br from-purple-200 via-white to-blue-200 dark:from-gray-800 dark:to-gray-700 rounded-xl p-6 shadow-lg">
+          <div className="bg-gradient-to-br from-purple-200 via-white to-blue-200  rounded-xl p-6 shadow-lg">
             <FileText className="mx-auto text-purple-500 w-6 h-6" />
-            <h3 className="text-lg font-semibold mt-2 text-gray-800 dark:text-white">Posts</h3>
+            <h3 className="text-lg font-semibold mt-2 text-gray-800 ">Posts</h3>
             <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">34</p>
           </div>
-          <div className="bg-gradient-to-br from-purple-200 via-white to-blue-200 dark:from-gray-800 dark:to-gray-700 rounded-xl p-6 shadow-lg">
+          <div className="bg-gradient-to-br from-purple-200 via-white to-blue-200  rounded-xl p-6 shadow-lg">
             <Calendar className="mx-auto text-green-500 w-6 h-6" />
-            <h3 className="text-lg font-semibold mt-2 text-gray-800 dark:text-white">Joined</h3>
+            <h3 className="text-lg font-semibold mt-2 text-gray-800">Joined</h3>
             <p className="text-2xl font-bold text-green-600 dark:text-green-400">Apr 2024</p>
           </div>
         </div>
