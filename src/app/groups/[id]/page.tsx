@@ -14,7 +14,9 @@ import { useGetGroupByIdQuery, useGetGroupsQuery } from "@/state/Api/group/api";
 import { Skeleton } from "@/components/ui/skeleton";
 const GroupDetail = () => {
   const { id } = useParams();
-  const { data, isLoading, isError, refetch } = useGetGroupByIdQuery(id)
+  const { data, isLoading, isError,isFetching, refetch } = useGetGroupByIdQuery(id,{
+    skip:!id
+  })
   const GroupInfo = data?.data.getGroup
 
   const userData = useSelector((state: { global: themeStatetype }) => state.global.user)
@@ -97,9 +99,9 @@ const GroupDetail = () => {
             <div className="flex flex-col relative h-full border rounded-lg shadow-md ">
               < TypingUserSubscription groupId={String(id)} onTypingUser={handleTypingUser} />
               {/* top bar */}
-              <ChatNavbar refetch={refetch} typingUsers={typingUsers || []} openChat={openChat} openFile={openFile} isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} isChatOpen={isChatOpen} isFileOpen={isFileOpen} GroupInfo={GroupInfo} />
+              <ChatNavbar refetchLoading={isFetching} refetch={refetch} typingUsers={typingUsers || []} openChat={openChat} openFile={openFile} isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} isChatOpen={isChatOpen} isFileOpen={isFileOpen} GroupInfo={GroupInfo} />
               {/* Group Content */}
-              <ChatBox setSendingMessage={setSendingMessage} refetch={refetch} groupId={String(id)} />
+              <ChatBox setSendingMessage={setSendingMessage}  groupId={String(id)} />
               {/* input box */}
               <div className=" w-full flex items-center justify-center mb-2">
                 <ChatInput sendingMessage={sendingMessage} setSendingMessage={setSendingMessage} groupId={GroupInfo?.id} senderId={userData.id} />

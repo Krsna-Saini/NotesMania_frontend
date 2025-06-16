@@ -17,18 +17,18 @@ type MessageType = {
 
 const ChatBox = ({
   groupId,
-  refetch,
   setSendingMessage
 }: {
   groupId: string;
-  refetch: () => void;
   setSendingMessage: Dispatch<SetStateAction<boolean>>;
 }) => {
   const {
     data: chatData,
     refetch: refetchMessages,
     isLoading,
-  } = useGetMessagesByIdQuery({ groupId });
+  } = useGetMessagesByIdQuery({ groupId },{
+    skip:!groupId
+  });
 
   const [messages, setMessages] = useState<MessageType[]>([]);
   const bottomDivRef = useRef<HTMLDivElement>(null);
@@ -39,8 +39,8 @@ const ChatBox = ({
 
   useEffect(() => {
     refetchMessages();
-  }, [groupId,refetchMessages]);
-
+  }, [groupId, refetchMessages]);
+  console.log(isVisible)
   useEffect(() => {
     if (chatData?.data?.getGroup?.messages) {
       setMessages(chatData.data.getGroup.messages);
@@ -48,13 +48,12 @@ const ChatBox = ({
   }, [chatData?.data?.getGroup?.messages, groupId]);
 
   const handleNewMessage = (newMessage: messageType) => {
-    
+
     setMessages((prev) => [...prev, { message: newMessage }]);
     if (!isVisible) {
       setNewMessage((prev) => prev + 1);
     }
     setSendingMessage(false)
-    refetch();
   };
 
   useLayoutEffect(() => {
@@ -68,7 +67,7 @@ const ChatBox = ({
       ([entry]) => {
         setIsVisible(entry.isIntersecting);
       },
-      { root: null, threshold: 1 }
+      { root: null, threshold: 0.5 }
     );
 
     const currentRef = bottomDivRef.current;
@@ -159,9 +158,9 @@ const ChatBox = ({
             })}
           </>
         )}
-        
-      <div className="h-20 w-full" ref={bottomDivRef}></div>
+         <div className="min-h-10 w-full" ref={bottomDivRef}></div>
       </div>
+     
       <div
         className={`${!newMessage && "hidden"
           } absolute bottom-24 md:bottom-28 right-6 flex items-center gap-2 bg-accent rounded-full p-2 px-4`}

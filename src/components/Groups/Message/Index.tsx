@@ -128,7 +128,7 @@ const AudioComponent = ({ fileName, fileUrl }: { fileUrl: string, fileName: stri
         <div >
           <audio src={fileUrl} controls className=' rounded' />
         </div>
-        <span className='text-sm'>{fileName}</span>
+        <span className='text-sm '>{fileName}</span>
       </div>
     </div>
   )
@@ -137,12 +137,12 @@ const ImageComponent = ({ fileName, fileUrl }: { fileUrl: string, fileName: stri
   const [dowloading, setdowloading] = useState<boolean>(false)
   return (
     <div className='relative flex justify-between items-center '>
-      <div className='flex gap-2 w-full px-2 py-1 items-center justify-between rounded bg-white dark:bg-black cursor-pointer'>
+      <div className='flex gap-2 w-full px-2 py-1 items-center justify-between rounded bg-white  cursor-pointer'>
         <div className='flex items-center gap-2'>
           <div className='p-2 rounded-lg  '>
             <img src={fileUrl} alt={fileName} className='size-10 object-cover rounded' />
           </div>
-          <span className='text-sm line-clamp-1 '>{fileName}</span>
+          <span className='text-sm dark:text-black line-clamp-1 '>{fileName}</span>
 
         </div>
         {
@@ -212,7 +212,7 @@ const DocumentComponent = ({ fileName, fileUrl, fileType }: {
           <div className='p-2 rounded-lg bg-indigo-300 '>
             <File className='text-indigo-600 bg-indigo-300  rounded-full' />
           </div>
-          <span className='text-sm line-clamp-1'>{fileName}</span>
+          <span className='text-sm dark:text-black line-clamp-1'>{fileName}</span>
 
         </div>
         {

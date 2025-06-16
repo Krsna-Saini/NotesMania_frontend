@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/context-menu"
 import { format, parseISO } from 'date-fns';
 import { IGroupMember } from '@/lib/utils';
-import { Cross, DownloadIcon, FileArchiveIcon, FilesIcon, FileVideo, GitPullRequest, Group, Info, Link2, Loader2, Pencil, Search, User2Icon, UserPlus, VideoIcon } from 'lucide-react';
+import { Cross, DownloadIcon, FileArchiveIcon, FilesIcon, FileVideo, GitPullRequest, Group, Info, Link2, Loader, Loader2, Pencil, Search, User2Icon, UserPlus, VideoIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { AttachmentType } from '@/lib/utils';
 import { Skeleton } from "@/components/ui/skeleton";
@@ -73,7 +73,7 @@ const handleDownload = async ({ fileUrl, fileName, fileType }: fileInput) => {
   document.body.removeChild(link);
   window.URL.revokeObjectURL(downloadUrl);
 };
-const ChatNavbar = ({ typingUsers, GroupInfo, isMenuOpen, isFileOpen, isChatOpen, refetch, setIsMenuOpen, openChat, openFile }: {
+const ChatNavbar = ({ refetchLoading, typingUsers, GroupInfo, isMenuOpen, isFileOpen, isChatOpen, refetch, setIsMenuOpen, openChat, openFile }: {
   GroupInfo: groupType
   isMenuOpen: boolean
   isChatOpen: boolean
@@ -83,6 +83,7 @@ const ChatNavbar = ({ typingUsers, GroupInfo, isMenuOpen, isFileOpen, isChatOpen
   openChat: () => void;
   openFile: () => void;
   refetch: () => void;
+  refetchLoading: boolean
 }) => {
   const {
     data: Response
@@ -112,7 +113,15 @@ const ChatNavbar = ({ typingUsers, GroupInfo, isMenuOpen, isFileOpen, isChatOpen
             </div>
           </div>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className=' h-full overflow-hidden w-88 md:w-114'>
+        <DropdownMenuContent className=' h-full relative overflow-hidden w-88 md:w-114'>
+
+          <button className='absolute cursor-pointer flex gap-1 z-50 top-2.5 right-2 p-1 rounded-full bg-accent border border-accent-foreground text-accent-foreground' onClick={() => {
+            refetch()
+          }}>
+            <Loader size={20} className={`${refetchLoading && "animate-spin"}`} />
+            <span className='text-sm '>{refetchLoading ?"Refreshing":"Refresh"}</span>
+          </button>
+
           <Tabs defaultValue="overview" >
             <TabsList className='overflow-auto '>
               <TabsTrigger value="overview"><Info></Info><span>Overview</span></TabsTrigger>
@@ -130,7 +139,7 @@ const ChatNavbar = ({ typingUsers, GroupInfo, isMenuOpen, isFileOpen, isChatOpen
               <FileComponent filesAttachments={filesAttachments} />
               <LinkComponent links={GroupInfo.links} />
               <InviteComponent groupId={GroupInfo.id} />
-              <RequestComponent refetch={refetch} Requests={GroupInfo.inviteRequests} groupId={GroupInfo.id} />
+              <RequestComponent Requests={GroupInfo.inviteRequests} groupId={GroupInfo.id} />
             </div>
           </Tabs>
         </DropdownMenuContent>
@@ -263,8 +272,8 @@ const MembersComponent = ({
         }
       })
       .catch(console.error)
-      .finally(()=>{
-         toast.dismiss(promotingtoast)
+      .finally(() => {
+        toast.dismiss(promotingtoast)
       })
   };
 
@@ -285,8 +294,8 @@ const MembersComponent = ({
         }
       })
       .catch(console.error)
-      .finally(()=>{
-         toast.dismiss(demotingAdmin)
+      .finally(() => {
+        toast.dismiss(demotingAdmin)
       });
   };
 
@@ -736,11 +745,9 @@ const InviteComponent = ({ groupId }: { groupId: string }) => {
 const RequestComponent = ({
   Requests,
   groupId,
-  refetch,
 }: {
   Requests: IInviteRequest[];
   groupId: string;
-  refetch: () => void;
 }) => {
   const [acceptRequest] = useAcceptInviteRequestMutation();
   const [rejectRequest] = useRejectInviteRequestMutation();
@@ -751,7 +758,6 @@ const RequestComponent = ({
     acceptRequest({ groupId, userId })
       .unwrap()
       .then((data) => {
-        refetch();
         if (data.errors) {
           toast.error(data?.errors[0].message || "there is some error")
         }
@@ -770,7 +776,6 @@ const RequestComponent = ({
     rejectRequest({ groupId, userId })
       .unwrap()
       .then((data) => {
-        refetch();
         if (data.errors) {
           toast.error(data?.errors[0].message || "there is some error")
         }
