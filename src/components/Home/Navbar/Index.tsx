@@ -14,11 +14,20 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 import { toggleDarkMode } from '@/state/Global'
 import { themeStatetype } from '@/state/Global'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { logout } from "@/state/Global";
 const Navbar = () => {
-    const isDarkMode=useSelector((state:{global:themeStatetype}) => state.global.darkMode)
+    const isDarkMode = useSelector((state: { global: themeStatetype }) => state.global.darkMode)
     const isAuthenticated = useSelector((state: { global: themeStatetype }) => state.global.isAuthenticated)
-    const userData= useSelector((state: { global: themeStatetype }) => state.global.user)
-    const dispatch=useDispatch()
+    const userData = useSelector((state: { global: themeStatetype }) => state.global.user)
+    const dispatch = useDispatch()
     const [open, setOpen] = useState(false) // Drawer
     const router = useRouter()
     return (
@@ -93,11 +102,42 @@ const Navbar = () => {
                     {/* seperator */}
                     <div className='w-[2px] h-8 bg-gray-700 mr-2'></div>
                     {/* login Info */}
-                    
-                            <Button icon={isAuthenticated?User:Lock} text={`${isAuthenticated ?"User": "login"}`} role={`${isAuthenticated?`${userData?.username || "User"}`:"Login to explore"}`} onClick={()=>{
-                                router.push('/auth/login')
-                            }} align='left'></Button>
-                       
+
+                    {isAuthenticated ? (
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <button className='flex items-center cursor-pointer gap-1 p-2 rounded-full bg-accent-foreground text-accent'>
+                                    <User size={20}/>
+                                   <span>Profile</span> 
+                                    </button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="w-48">
+                                <DropdownMenuLabel>Hi, {userData?.username || "User"} 👋</DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                    onClick={() => router.push('/profile')}
+                                    className="cursor-pointer"
+                                >
+                                    Profile
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={() => dispatch(logout())}
+                                    className="cursor-pointer text-red-600"
+                                >
+                                    Logout
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    ) : (
+                        <Button
+                            icon={Lock}
+                            text="Login"
+                            role="Login to explore"
+                            onClick={() => router.push('/auth/login')}
+                            align="left"
+                        />
+                    )}
+
                 </div>
             </div>
         </div>

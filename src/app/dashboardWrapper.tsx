@@ -5,12 +5,14 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { usePathname } from "next/navigation";
 import React from "react";
 import { Provider, useSelector } from "react-redux";
-import { store } from "@/state/store";
+import { store, persistor } from "@/state/store";
 import { ApolloProvider } from "@apollo/client";
 import client from "@/state/wsClient";
 import { themeStatetype } from "@/state/Global";
 import AuthWrapper from "@/components/Multipurpose/authSecurity";
 import { Toaster } from "@/components/ui/sonner";
+import { PersistGate } from "redux-persist/integration/react";
+import { Loader2, User } from "lucide-react";
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const darkmode = useSelector((state: { global: themeStatetype }) => state.global.darkMode)
   const pathname: string = usePathname()
@@ -40,25 +42,40 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     </div>
   );
 };
-
+ function LoadingState() {
+  return (
+    <div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-tr from-gray-100 to-gray-200 text-gray-800 dark:from-gray-900 dark:to-gray-800 dark:text-white transition-colors">
+      <div className="flex flex-col items-center gap-4 animate-fade-in">
+        <Loader2 className="w-10 h-10 animate-spin text-blue-500" />
+        <div className="text-center">
+          <h1 className="text-xl font-semibold">Restoring your session...</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            Bringing everything back just for you <User className="inline w-4 h-4 ml-1" />
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
 const DashboardWrapper = ({ children }: { children: React.ReactNode }) => {
   const pathname: string = usePathname()
   return (
-
     <ApolloProvider client={client}>
-      <SidebarProvider>
-        <Provider store={store}>
-          {
-            pathname.includes('/ai-assistance') && <SidebarTrigger />
-          }
-          <DashboardLayout>
-            <AuthWrapper>
-              {children}
-            </AuthWrapper>
-          </DashboardLayout>
-          <Toaster/>
-        </Provider>
-      </SidebarProvider>
+      <PersistGate loading={<LoadingState />} persistor={persistor}>
+        <SidebarProvider>
+          <Provider store={store}>
+            {
+              pathname.includes('/ai-assistance') && <SidebarTrigger />
+            }
+            <DashboardLayout>
+              <AuthWrapper>
+                {children}
+              </AuthWrapper>
+            </DashboardLayout>
+            <Toaster />
+          </Provider>
+        </SidebarProvider>
+      </PersistGate>
     </ApolloProvider>
 
   );
