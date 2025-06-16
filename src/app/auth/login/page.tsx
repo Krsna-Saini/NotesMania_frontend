@@ -63,7 +63,7 @@ const Login = () => {
         </div>
 
         {/* Login form */}
-        <div className="w-full md:w-1/2 p-10 flex flex-col justify-center bg-gray-50">
+        <div className="w-full md:w-1/2 p-10 flex flex-col justify-center text-black bg-gray-50">
           <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">User Login</h2>
           <form className="space-y-6" onSubmit={handleLogin}>
             <div className="relative">
@@ -115,7 +115,10 @@ const Login = () => {
 
           <p className='mt-6 text-center text-gray-500'>
             Don&apos;t have an account?{' '}
-            <a href='/auth/signup' className='text-pink-600 hover:underline'>Sign Up</a>
+            <button onClick={()=>{
+              router.push('/auth/signup')
+            }} className='text-pink-600 hover:underline cursor-pointer'>Sign Up
+            </button>
           </p>
         </div>
       </div>

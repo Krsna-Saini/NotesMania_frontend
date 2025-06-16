@@ -4,8 +4,8 @@ import { User, Mail, Lock } from 'lucide-react'
 import { useSignupMutation } from '@/state/Api/user/api'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
-
 const Signup = () => {
+
   const [username, setUsername] = useState<string>('')
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
@@ -43,7 +43,7 @@ const Signup = () => {
         </div>
 
         {/* Signup form */}
-        <div className="w-full md:w-1/2 p-10 flex flex-col justify-center bg-gray-50">
+        <div className="w-full md:w-1/2 p-10 flex flex-col text-black justify-center bg-gray-50">
           <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">User Signup</h2>
           <form className="space-y-6" onSubmit={handleRegister}>
             <div className="relative">
@@ -103,9 +103,11 @@ const Signup = () => {
 
           <p className='mt-6 text-center text-gray-500'>
             Already have an account?{' '}
-            <a href='/auth/login' className='text-pink-600 hover:underline'>
+            <button onClick={()=>{
+              router.push("/auth/login")
+            }} className='text-pink-600 hover:underline cursor-pointer'>
               Login
-            </a>
+            </button>
           </p>
         </div>
       </div>

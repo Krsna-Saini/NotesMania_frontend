@@ -5,16 +5,18 @@ import Bulb from '@/components/Icons/Bulb/Index'
 import { motion } from 'framer-motion'
 import { ArrowRight, Brain, PartyPopper } from 'lucide-react'
 import Image from 'next/image'
-import React , {useEffect} from 'react'
+import React, { useEffect } from 'react'
 import { homeCardData } from '@/lib/utils'
-const ws_url=process.env.NEXT_PUBLIC_WS_URL
+import { useRouter } from 'next/navigation'
+const ws_url = process.env.NEXT_PUBLIC_WS_URL
 const Home = () => {
-useEffect(() => {
-    console.log(ws_url)
-    const ws = new WebSocket( `${ws_url}`);
-    ws.onopen = () => console.log("✅ WebSocket Connected");
-    ws.onerror = (err) => console.error("❌ WebSocket Error", err);
-  }, []);
+    const router = useRouter()
+    useEffect(() => {
+        console.log(ws_url)
+        const ws = new WebSocket(`${ws_url}`);
+        ws.onopen = () => console.log("✅ WebSocket Connected");
+        ws.onerror = (err) => console.error("❌ WebSocket Error", err);
+    }, []);
     return (
         <div>
             {/* welcome Component */}
@@ -144,7 +146,9 @@ useEffect(() => {
                         </strong>
                     </div>
                     <div className='flex mt-8 gap-4'>
-                        <button className=' bg-orange-600 p-2 rounded-2xl'> Create your Own Account</button>
+                        <button onClick={() => {
+                            router.push("/auth/signup")
+                        }} className=' bg-orange-600 cursor-pointer p-2 rounded-2xl'> Create your Own Account</button>
                     </div>
                 </div>
                 <div className='hidden md:flex'>
